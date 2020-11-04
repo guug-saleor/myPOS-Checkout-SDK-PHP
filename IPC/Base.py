@@ -8,7 +8,7 @@ from IPC.Defines import Defines
 from IPC.Helper import Helper
 from IPC.IPC_Exception import IPC_Exception
 from IPC.Response import Response
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qsl
 
 """
 *  Base API Class. Contains basic API-connection methods.
@@ -141,34 +141,37 @@ class Base(metaclass=abc.ABCMeta):
     def _processPost(self):
         self.__params['Signature'] = self.__createSignature()
         url = urlparse(self.getCnf().getIpcURL())
-        ssl = ""
-        if not isset(url['port']):
-            if url['scheme'] == 'https':
-                url['port'] = 443
+        ssl = "" # JSON.parse({"url": ""})
+        if not url.port:
+            if url.scheme == 'https':
+                url.port = 443
                 ssl = "ssl://"
             else:
-                url['port'] = 80
+                url.port = 80
         postData = http_build_query(self.__params)
-        fp = @fsockopen(ssl.url['host'], url['port'], errno, errstr, 10)
+        # TODO mayby add try catch construction
+        fp = fsockopen(f"{ssl}{url.hostname}", url.port, errno, errstr, 10)
         if not fp:
             raise IPC_Exception('Error connecting IPC URL')
         else:
             eol = "\r\n"
-            path = url['path'] + ('' if (bool(url['query'])) else ('?' + url['query']))
-            fputs(fp, f"POST {path} HTTP/1.1{eol}")
-            fputs(fp, f"Host: {url['host']}{eol}")
-            fputs(fp, f"Content-type: application/x-www-form-urlencoded{eol}")
-            fputs(fp, f"Content-length: {len(postData)}{eol}")
-            fputs(fp, f"Connection: close{eol}{eol}")
-            fputs(fp, f"{postData}{eol}{eol}")
+            path = url.path + ('' if (bool(url.query)) else ('?' + url.query))
+            fp.write(f"POST {path} HTTP/1.1{eol}")
+            fp.write(f"Host: {url.hostname}{eol}")
+            fp.write(f"Content-type: application/x-www-form-urlencoded{eol}")
+            fp.write(f"Content-length: {len(postData)}{eol}")
+            fp.write(f"Connection: close{eol}{eol}")
+            fp.write(f"{postData}{eol}{eol}")
 
             result = ''
-            while (not feof(fp)):
-                result += @fgets(fp, 1024)
-            fclose(fp)
+            line = fp.readline(1024)
+            while (line):
+                result += line
+                line = fp.readline(1024)
+            fp.close()
             result = explode(f"{eol}{eol}", result, 2)
-            header = result[0] if isset(result[0]) else ''
-            cont = result[1] if isset(result[1]) else ''
+            header = result[0] if result.length > 0 else ''
+            cont = result[1] if result.length > 1 else ''
 
             #Check Transfer-Encoding: chunked
             if bool(cont) and strpos(header, 'Transfer-Encoding: chunked') != False:
