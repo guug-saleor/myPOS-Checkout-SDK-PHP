@@ -10,24 +10,23 @@ from IPC.IPC_Exception import IPC_Exception
 from IPC.Response import Response
 from urllib.parse import urlparse, parse_qsl
 
-"""
-*  Base API Class. Contains basic API-connection methods.
-"""
 class Base(metaclass=abc.ABCMeta):
+    """
+*  Base API Class. Contains basic API-connection methods.
+    """
     """
     *  @var string Output format from API for some requests may be XML or JSON
     """
     _outputFormat = Defines.COMMUNICATION_FORMAT_JSON
-    """
-    *  @var Config
-    """
     __cnf: Config
     """
     *  @var array Params for API Request
     """
     __params = {}
 
-    """
+    @staticmethod
+    def isValidSignature(data: str, signature: str, pubKey: str):
+        """
     *  Verify signature of API Request __params against the API public key
     * 
     *  @param string data Signed data
@@ -35,9 +34,7 @@ class Base(metaclass=abc.ABCMeta):
     *  @param string pubKey API public key
     * 
     *  @return boolean
-    """
-    @staticmethod
-    def isValidSignature(data: str, signature: str, pubKey: str):
+        """
         pubKeyId = openssl_get_publickey(pubKey)
         res = openssl_verify(data, base64.b64decode(signature), pubKeyId, Defines.SIGNATURE_ALGO)
         openssl_free_key(pubKeyId)
@@ -46,101 +43,101 @@ class Base(metaclass=abc.ABCMeta):
 
         return True
 
-    """
+    def getOutputFormat(self):
+        """
     *  Return current set output format for API Requests
     * 
     *  @return string
-    """
-    def getOutputFormat(self):
+        """
         return self._outputFormat
 
-    """
+    def setOutputFormat(self, outputFormat: str):
+        """
     *  Set current set output format for API Requests
     * 
     *  @param string outputFormat
-    """
-    def setOutputFormat(self, outputFormat: str):
+        """
         self._outputFormat = outputFormat
 
-    """
+    def _addPostParam(self, paramName: str, paramValue, encrypt = False):
+        """
     *  Add API request param
     * 
     *  @param string paramName
     *  @param string paramValue
     *  @param bool encrypt
-    """
-    def _addPostParam(self, paramName: str, paramValue, encrypt = False):
+        """
         if not isinstance(paramValue, str):
             paramValue = str(paramValue)
         self.__params[paramName] = self.__encryptData(paramValue) if encrypt else Helper.escape(Helper.unescape(paramValue))
 
-    """
+    def __encryptData(self, data: str):
+        """
     *  Create signature of API Request __params against the SID private key
     * 
     *  @param string data
     * 
     *  @return string base64 encoded signature
-    """
-    def __encryptData(self, data: str):
-        openssl_public_encrypt(data, crypted, self.getCnf().getEncryptPublicKey(), Defines.ENCRYPT_PADDING)
+        """
+        openssl_public_encrypt(data, crypted, self._getCnf().getEncryptPublicKey(), Defines.ENCRYPT_PADDING)
 
         return base64.b64encode(crypted)
 
-    """
+    def _getCnf(self):
+        """
     *  Return IPC\Config object with current IPC configuration
     * 
     *  @return Config
-    """
-    def getCnf(self):
+        """
         return self.__cnf
 
-    """
+    def _setCnf(self, cnf: Config):
+        """
     *  Set Config object with current IPC configuration
     * 
     *  @param cnf: Config
-    """
-    def _setCnf(self, cnf: Config):
+        """
         self.__cnf = cnf
 
-    """
-    *  Generate HTML form with POST __params and auto-submit it
-    """
     def _processHtmlPost(self):
+        """
+    *  Generate HTML form with POST __params and auto-submit it
+        """
         #Add request signature
         self.__params['Signature'] = self.__createSignature()
 
         c = '<body onload="document.ipcForm.submit()">'
-        c += '<form id="ipcForm" name="ipcForm" action="' + self.getCnf().getIpcURL() + '" method="post">'
+        c += '<form id="ipcForm" name="ipcForm" action="' + self._getCnf().getIpcURL() + '" method="post">'
         for k, v in self.__params:
             c += "<input type=\"hidden\" name=\"" + k + "\" value=\"" + v + "\"  />\n"
         c += '</form></body>'
         print (c)
         exit
 
-    """
+    def __createSignature(self):
+        """
     *  Create signature of API Request __params against the SID private key
     * 
     *  @return string base64 encoded signature
-    """
-    def __createSignature(self):
+        """
         __params = self.__params
         for k, v in __params:
             __params[k] = Helper.unescape(v)
         concData = base64.b64encode(implode('-', __params))
-        privKey = openssl_get_privatekey(self.getCnf().getPrivateKey())
+        privKey = openssl_get_privatekey(self._getCnf().getPrivateKey())
         openssl_sign(concData, signature, privKey, Defines.SIGNATURE_ALGO)
 
         return base64.b64encode(signature)
 
-    """
+    def _processPost(self):
+        """
     *  Send POST Request to API and returns Response object with validated response data
     * 
     *  @return Response
     *  @raises IPC_Exception
-    """
-    def _processPost(self):
+        """
         self.__params['Signature'] = self.__createSignature()
-        url = urlparse(self.getCnf().getIpcURL())
+        url = urlparse(self._getCnf().getIpcURL())
         ssl = "" # JSON.parse({"url": ""})
         if not url.port:
             if url.scheme == 'https':
@@ -181,16 +178,16 @@ class Base(metaclass=abc.ABCMeta):
             if cont:
                 cont = trim(cont)
 
-            return Response.getInstance(self.getCnf(), cont, self._outputFormat)
+            return Response.getInstance(self._getCnf(), cont, self._outputFormat)
 
-    """
+    def __httpChunkedDecode(self, chunk: str):
+        """
     *  Alternative of php http-chunked-decode function
     * 
     *  @param string chunk
     * 
     *  @return mixed
-    """
-    def __httpChunkedDecode(self, chunk: str):
+        """
         pos = 0
         len = len(chunk)
         dechunk = None
@@ -211,14 +208,14 @@ class Base(metaclass=abc.ABCMeta):
 
         return dechunk
 
-    """
+    def __is_hex(_self, hex: str):
+        """
     *  determine if a string can represent a number in hexadecimal
     * 
     *  @param string hex
     * 
     *  @return boolean True if the string is a hex, otherwise False
-    """
-    def __is_hex(_self, hex: str):
+        """
         # regex is for weenies
         hex = strtolower(trim(ltrim(hex, "0")))
         if not bool(hex):

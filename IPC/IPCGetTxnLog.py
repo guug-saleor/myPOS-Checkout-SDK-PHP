@@ -4,51 +4,51 @@ from IPC.Helper import Helper
 from IPC.IPC_Exception import IPC_Exception
 
 
-"""
+class IPCGetTxnLog(Base):
+    """
  * Process IPC method: IPCGetTxnLog.
  * Collect, validate and send API params
-"""
-class IPCGetTxnLog(Base):
+    """
     __orderID: str
 
-    """
+    def __init__(self, cnf: Config):
+        """
     * Return IPCGetTxnLog object
     *
     * @param cnf: Config
-    """
-    def __init__(self, cnf: Config):
+        """
         self._setCnf(cnf)
 
-    """
+    def process(self):
+        """
     * Initiate API request
     *
     * @return Response
     * @raises IPC_Exception
-    """
-    def process(self):
+        """
         self.validate()
 
         self._addPostParam('IPCmethod', 'IPCGetTxnLog')
-        self._addPostParam('IPCVersion', self.getCnf().getVersion())
-        self._addPostParam('IPCLanguage', self.getCnf().getLang())
-        self._addPostParam('SID', self.getCnf().getSid())
-        self._addPostParam('WalletNumber', self.getCnf().getWallet())
-        self._addPostParam('KeyIndex', self.getCnf().getKeyIndex())
-        self._addPostParam('Source', self.getCnf().getSource())
+        self._addPostParam('IPCVersion', self._getCnf().getVersion())
+        self._addPostParam('IPCLanguage', self._getCnf().getLang())
+        self._addPostParam('SID', self._getCnf().getSid())
+        self._addPostParam('WalletNumber', self._getCnf().getWallet())
+        self._addPostParam('KeyIndex', self._getCnf().getKeyIndex())
+        self._addPostParam('Source', self._getCnf().getSource())
         self._addPostParam('OrderID', self.getOrderID())
         self._addPostParam('OutputFormat', self.getOutputFormat())
 
         return self._processPost()
 
-    """
+    def validate(self):
+        """
     * Validate all set details
     *
     * @return boolean
     * @raises IPC_Exception
-    """
-    def validate(self):
+        """
         try:
-            self.getCnf().validate()
+            self._getCnf().validate()
         except Exception as ex:
             raise IPC_Exception(f'Invalid Config details: {ex}')
 
@@ -60,22 +60,22 @@ class IPCGetTxnLog(Base):
 
         return True
 
-    """
+    def getOrderID(self):
+        """
     * Original request order id
     *
     * @return string
-    """
-    def getOrderID(self):
+        """
         return self.__orderID
 
-    """
+    def setOrderID(self, orderID: str):
+        """
     * Original request order id
     *
     * @param string orderID
     *
     * @return IPCGetTxnLog
-    """
-    def setOrderID(self, orderID: str):
+        """
         self.__orderID = orderID
 
         return self

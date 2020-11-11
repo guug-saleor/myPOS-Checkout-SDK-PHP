@@ -2,10 +2,10 @@ from IPC.Helper import Helper
 from IPC.IPC_Exception import IPC_Exception
 
 
-"""
- * Purchase cart object
-"""
 class Cart(object):
+    """
+ * Purchase cart object
+    """
     ITEM_TYPE_ARTICLE = 'article'
     ITEM_TYPE_DELIVERY = 'delivery'
     ITEM_TYPE_DISCOUNT = 'discount'
@@ -17,7 +17,8 @@ class Cart(object):
     """
     __cart = []
 
-    """
+    def add(self, itemName, quantity, price, type = ITEM_TYPE_ARTICLE):
+        """
     *
     * @param string itemName Item name
     * @param int quantity Items quantity
@@ -26,8 +27,7 @@ class Cart(object):
     * @param string type
     * @return Cart
     * @raises IPC_Exception
-    """
-    def add(self, itemName, quantity, price, type = ITEM_TYPE_ARTICLE):
+        """
         if not bool(itemName):
             raise IPC_Exception('Invalid cart item name')
 
@@ -52,12 +52,12 @@ class Cart(object):
 
         return self
 
-    """
+    def getTotal(self):
+        """
     * Returns cart total amount
     *
     * @return float
-    """
-    def getTotal(self):
+        """
         sum = 0
         if bool(self.__cart):
             for v in self.__cart :
@@ -65,31 +65,31 @@ class Cart(object):
 
         return sum
 
-    """
+    def getItemsCount(self):
+        """
     * Returns count of items in cart
     *
     * @return int
-    """
-    def getItemsCount(self):
+        """
         # TODO: select one of (list, tuple)
         return self.__cart.count if (bool(self.__cart) and isinstance(self.__cart, (list, tuple))) else 0
 
-    """
+    def validate(self):
+        """
     * Validate cart items
     *
     * @return boolean
     * @raises IPC_Exception
-    """
-    def validate(self):
+        """
         if not self.getCart() or self.getItemsCount() == 0:
             raise IPC_Exception('Missing cart items')
 
         return True
 
-    """
+    def getCart(self):
+        """
     * Return cart array
     *
     * @return array
-    """
-    def getCart(self):
+        """
         return self.__cart

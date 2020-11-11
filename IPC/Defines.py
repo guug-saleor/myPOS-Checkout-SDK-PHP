@@ -1,10 +1,10 @@
 
 
 
-"""
-*  Container for SDK constants
-"""
 class Defines(object):
+    """
+*  Container for SDK constants
+    """
     COMMUNICATION_FORMAT_XML = 'xml'
     COMMUNICATION_FORMAT_JSON = 'json'
     COMMUNICATION_FORMAT_POST = 'post'

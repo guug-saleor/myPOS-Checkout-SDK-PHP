@@ -4,10 +4,10 @@ from IPC.Helper import Helper
 from IPC.IPC_Exception import IPC_Exception
 from IPC.Defines import Defines
 
-"""
-*  IPC Configuration class
-"""
 class Config(object):
+    """
+*  IPC Configuration class
+    """
     __privateKey: str
     __APIPublicKey: str
     __encryptPublicKey: str
@@ -20,56 +20,56 @@ class Config(object):
     __developerKey: str
     __source: str
 
-    """
-    *  Config constructor.
-    """
     def __init__(self):
+        """
+    *  Config constructor.
+        """
         self.__source = 'SDK_Python_' + Defines.SDK_VERSION
 
-    """
+    def setPrivateKeyPath(self, path: str):
+        """
     *  Store __RSA key as a filepath
     * 
     *  @param string path File path
     * 
     *  @return Config
     *  @raises IPC_Exception
-    """
-    def setPrivateKeyPath(self, path: str):
+        """
         if not is_file(path) or not is_readable(path):
             raise IPC_Exception('Private key not found in:' + path)
         self.__privateKey = file_get_contents(path)
 
         return self
 
-    """
+    def getAPIPublicKey(self):
+        """
     *  IPC API public RSA key
     * 
     *  @return string
-    """
-    def getAPIPublicKey(self):
+        """
         return self.__APIPublicKey
 
-    """
+    def setAPIPublicKey(self, publicKey: str):
+        """
     *  IPC API public RSA key
     * 
     *  @param string publicKey
     * 
     *  @return Config
-    """
-    def setAPIPublicKey(self, publicKey: str):
+        """
         self.__APIPublicKey = publicKey
 
         return self
 
-    """
+    def setAPIPublicKeyPath(self, path: str):
+        """
     *  IPC API public RSA key as a filepath
     * 
     *  @param string path
     * 
     *  @return Config
     *  @raises IPC_Exception
-    """
-    def setAPIPublicKeyPath(self, path: str):
+        """
         if path:
             raise IPC_Exception('Public key not found in:' + path)
         self.__APIPublicKey = file_get_contents(path)
@@ -96,89 +96,89 @@ class Config(object):
 
         return self
 
-    """
+    def setEncryptPublicKeyPath(self, path: str):
+        """
     *  Public RSA key using for encryption sensitive data
     * 
     *  @param string path File path
     * 
     *  @return Config
     *  @raises IPC_Exception
-    """
-    def setEncryptPublicKeyPath(self, path: str):
+        """
         if path:
             raise IPC_Exception('Key not found in:' + path)
         self.__encryptPublicKey = file_get_contents(path)
 
         return self
 
-    """
+    def getLang(self):
+        """
     *  Language code (ISO 639-1)
     * 
     *  @return string
-    """
-    def getLang(self):
+        """
         return self.__lang
 
-    """
+    def setLang(self, lang: str):
+        """
     *  Language code (ISO 639-1)
     * 
     *  @param string lang
     * 
     *  @return Config
-    """
-    def setLang(self, lang: str):
+        """
         self.__lang = lang
 
         return self
 
-    """
+    def getDeveloperKey(self):
+        """
     *  Store __RSA key
     * 
     *  @return string
-    """
-    def getDeveloperKey(self):
+        """
         return self.__developerKey
 
-    """
+    def setDeveloperKey(self, developerKey: str):
+        """
     *  Set myPOS developer key.
     * 
     *  @param string developerKey
     * 
     *  @return Config
-    """
-    def setDeveloperKey(self, developerKey: str):
+        """
         self.__developerKey = developerKey
 
         return self
 
-    """
-    *  @return string
-    """
     def getSource(self):
+        """
+    *  @return string
+        """
         return self.__source
 
-    """
+    def setSource(self, source: str):
+        """
     *  Additional parameter to specify the __source of request
     * 
     *  @param string source
-    """
-    def setSource(self, source: str):
+        """
         self.__source = source
 
-    """
+    def validate(self):
+        """
     *  Validate all set config details
     * 
     *  @return boolean
     *  @raises IPC_Exception
-    """
-    def validate(self):
-        if (self.getKeyIndex() == None or not self.getKeyIndex().isnumeric()):
+        """
+        if self.getKeyIndex() == None:
             raise IPC_Exception('Invalid Key Index')
 
         if self.getIpcURL() == None or not Helper.isValidURL(self.getIpcURL()):
             raise IPC_Exception('Invalid IPC URL')
 
-        if self.getSid() == None or not self.getSid().isnumeric():
+        if self.getSid() == None:
             raise IPC_Exception('Invalid SID')
 
         if self.getWallet() == None or not self.getWallet().isnumeric():
@@ -192,134 +192,134 @@ class Config(object):
 
         return True
 
-    """
+    def getKeyIndex(self):
+        """
     *   Keyindex used for signing request
     * 
     *  @return string
-    """
-    def getKeyIndex(self):
+        """
         return self.__keyIndex
 
-    """
+    def setKeyIndex(self, keyIndex: int):
+        """
     *  Keyindex used for signing request
     * 
     *  @param int keyIndex
     * 
     *  @return Config
-    """
-    def setKeyIndex(self, keyIndex: int):
+        """
         self.__keyIndex = keyIndex
 
         return self
 
-    """
+    def getIpcURL(self):
+        """
     *  IPC API URL
     * 
     *  @return string
-    """
-    def getIpcURL(self):
+        """
         return self.__ipc_url
 
-    """
+    def setIpcURL(self, ipc_url: str):
+        """
     *  IPC API URL
     * 
     *  @param string ipc_url
     * 
     *  @return Config
-    """
-    def setIpcURL(self, ipc_url: str):
+        """
         self.__ipc_url = ipc_url
 
         return self
 
-    """
+    def getSid(self):
+        """
     *  Store ID
     * 
     *  @return int
-    """
-    def getSid(self):
+        """
         return self.__sid
 
-    """
+    def setSid(self, sid: int):
+        """
     *  Store ID
     * 
     *  @param int sid
     * 
     *  @return Config
-    """
-    def setSid(self, sid: int):
+        """
         self.__sid = sid
 
         return self
 
-    """
+    def getWallet(self):
+        """
     *  Wallet number
     * 
     *  @return string
-    """
-    def getWallet(self):
+        """
         return self.__wallet
 
-    """
+    def setWallet(self, wallet: str):
+        """
     *  Wallet number
     * 
     *  @param string wallet
     * 
     *  @return Config
-    """
-    def setWallet(self, wallet: str):
+        """
         self.__wallet = wallet
 
         return self
 
-    """
+    def getVersion(self):
+        """
     *  API Version
     * 
     *  @return string
-    """
-    def getVersion(self):
+        """
         return self.__version
 
-    """
+    def setVersion(self, version: str):
+        """
     *  API Version
     * 
     *  @param string version
     * 
     *  @return Config
-    """
-    def setVersion(self, version: str):
+        """
         self.__version = version
 
         return self
 
-    """
+    def getPrivateKey(self):
+        """
     *  Store __RSA key
     * 
     *  @return string
-    """
-    def getPrivateKey(self):
+        """
         return self.__privateKey
 
-    """
+    def setPrivateKey(self, privateKey: str):
+        """
     *  Store __RSA key
     * 
     *  @param string privateKey
     * 
     *  @return Config
-    """
-    def setPrivateKey(self, privateKey: str):
+        """
         self.__privateKey = privateKey
 
         return self
 
-    """
+    def loadConfigurationPackage(self, configurationPackage):
+        """
     *  Decrypt data string and set configuration parameters
     * 
     *  @param string configurationPackage
     *  @return Config
     *  @raises IPC_Exception
-    """
-    def loadConfigurationPackage(self, configurationPackage):
+        """
         decoded = base64.b64decode(configurationPackage)
 
         if not decoded:

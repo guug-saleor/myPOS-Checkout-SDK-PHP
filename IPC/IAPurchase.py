@@ -5,79 +5,75 @@ from IPC.Config import Config
 from IPC.IPC_Exception import IPC_Exception
 
 
-"""
- * Process IPC method: IPCIAPurchase.
- * Collect, validate and send API params
-"""
 class IAPurchase(Base):
     """
-    * @var Cart
+ * Process IPC method: IPCIAPurchase.
+ * Collect, validate and send API params
     """
+
     __cart: Cart
-    """
-    * @var Card
-    """
+
     __card: Card
     __currency = 'EUR'
     __accountSettlement: str
     __orderID: str
     __note: str
 
-    """
+    def __init__(self, cnf: Config):
+        """
     * Return purchase object
     *
     * @param cnf: Config
-    """
-    def __init__(self, cnf: Config):
+        """
         self._setCnf(cnf)
 
-    """
+    def setOrderID(self, orderID: str):
+        """
     * Purchase identifier - must be unique
     *
     * @param string orderID
     *
     * @return IAPurchase
-    """
-    def setOrderID(self, orderID: str):
+        """
         self.__orderID = orderID
 
         return self
 
-    """
+    def setNote(self, note: str):
+        """
     * Optional note to purchase
     *
     * @param string note
     *
     * @return IAPurchase
-    """
-    def setNote(self, note: str):
+        """
         self.__note = note
 
         return self
 
-    """
+    def setAccountSettlement(self, accountSettlement: str):
+        """
     * Account for payment settlement
     *
     * @param string accountSettlement
-    """
-    def setAccountSettlement(self, accountSettlement: str):
+        """
         self.__accountSettlement = accountSettlement
 
-    """
+    def process(self):
+        """
     * Initiate API request
     *
     * @return Response
-    """
-    def process(self):
+        """
         self.validate()
 
         self._addPostParam('IPCmethod', 'IPCIAPurchase')
-        self._addPostParam('IPCVersion', self.getCnf().getVersion())
-        self._addPostParam('IPCLanguage', self.getCnf().getLang())
-        self._addPostParam('SID', self.getCnf().getSid())
-        self._addPostParam('WalletNumber', self.getCnf().getWallet())
-        self._addPostParam('KeyIndex', self.getCnf().getKeyIndex())
-        self._addPostParam('Source', self.getCnf().getSource())
+        self._addPostParam('IPCVersion', self._getCnf().getVersion())
+        self._addPostParam('IPCLanguage', self._getCnf().getLang())
+        self._addPostParam('SID', self._getCnf().getSid())
+        self._addPostParam('WalletNumber', self._getCnf().getWallet())
+        self._addPostParam('KeyIndex', self._getCnf().getKeyIndex())
+        self._addPostParam('Source', self._getCnf().getSource())
 
         self._addPostParam('OrderID', self.getOrderID())
         self._addPostParam('Amount', self.getCart().getTotal())
@@ -112,18 +108,18 @@ class IAPurchase(Base):
 
         return self._processPost()
 
-    """
+    def validate(self):
+        """
     * Validate all set purchase details
     *
     * @return boolean
     * @raises IPC_Exception
-    """
-    def validate(self):
+        """
         if self.getCurrency() == None:
             raise IPC_Exception('Invalid __currency')
 
         try:
-            self.getCnf().validate()
+            self._getCnf().validate()
         except Exception as ex:
             raise IPC_Exception(f'Invalid Config details: {ex}')
 
@@ -145,82 +141,82 @@ class IAPurchase(Base):
 
         return True
 
-    """
+    def getCurrency(self):
+        """
     * ISO-4217 Three letter __currency code
     *
     * @return string
-    """
-    def getCurrency(self):
+        """
         return self.__currency
 
-    """
+    def setCurrency(self, currency: str):
+        """
     * ISO-4217 Three letter __currency code
     *
     * @param string currency
     *
     * @return IAPurchase
-    """
-    def setCurrency(self, currency: str):
+        """
         self.__currency = currency
 
         return self
 
-    """
+    def getCart(self):
+        """
     * Cart object
     *
     * @return Cart
-    """
-    def getCart(self):
+        """
         return self.__cart
 
-    """
+    def setCart(self, cart: Cart):
+        """
     * Cart object
     *
     * @param cart: Cart
     *
     * @return IAPurchase
-    """
-    def setCart(self, cart: Cart):
+        """
         self.__cart = cart
 
         return self
 
-    """
+    def getCard(self):
+        """
     * Card object
     *
     * @return Card
-    """
-    def getCard(self):
+        """
         return self.__card
 
-    """
+    def setCard(self, card: Card):
+        """
     * Card object
     *
     * @param Card card
-    """
-    def setCard(self, card: Card):
+        """
         self.__card = card
 
-    """
+    def getOrderID(self):
+        """
     * Purchase identifier
     *
     * @return string
-    """
-    def getOrderID(self):
+        """
         return self.__orderID
 
-    """
+    def getAccountSettlement(self):
+        """
     * Account for payment settlement
     *
     * @return string
-    """
-    def getAccountSettlement(self):
+        """
         return self.__accountSettlement
 
-    """
+    def getNote(self):
+        """
     * Optional note to purchase
     *
     * @return string
-    """
-    def getNote(self):
+        """
         return self.__note
