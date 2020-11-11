@@ -1,6 +1,10 @@
 import base64
 import json
 from typing import Dict
+
+import xmltodict
+
+from IPC import Crypto
 from IPC.Defines import Defines
 from IPC.Config import Config
 from IPC.Helper import Helper
@@ -46,8 +50,8 @@ class Response(object):
         if format == Defines.COMMUNICATION_FORMAT_JSON:
             self.__data = Dict[str, str](json.loads(self.__raw_data))
         elif format == Defines.COMMUNICATION_FORMAT_XML:
-            self.__data = Dict[str, str](SimpleXMLElement(self.__raw_data))
-            if self.__data['@attributes']):
+            self.__data = xmltodict.parse(self.__raw_data)
+            if self.__data['@attributes']:
                 del self.__data['@attributes']
         elif format == Defines.COMMUNICATION_FORMAT_POST:
             self.__data = self.__raw_data
@@ -86,12 +90,12 @@ class Response(object):
         if not self.__cnf:
             raise IPC_Exception('Missing config object!')
 
-        pubKeyId = openssl_get_publickey(self.__cnf.getAPIPublicKey())
-        if (not openssl_verify(__getSignData(), base64.b64decode(self.__signature), pubKeyId, Defines.SIGNATURE_ALGO)):
+        pubKey = self.__cnf.getAPIPublicKey()
+        if not Crypto.verify(self.__getSignData(), base64.b64decode(self.__signature), pubKey, Defines.SIGNATURE_ALGO):
             raise IPC_Exception('Signature check failed!')
 
     def __getSignData(self):
-        return base64.b64encode(implode('-', Helper.getValuesFromMultiDimensionalArray(self.__data)))
+        return base64.b64encode('-'.join(list(Helper.getValuesFromMultiDimensionalArray(self.__data))))
 
 
     @staticmethod

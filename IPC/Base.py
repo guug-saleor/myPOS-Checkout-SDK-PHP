@@ -13,6 +13,9 @@ from IPC.IPC_Exception import IPC_Exception
 from IPC.Response import Response
 from urllib.parse import urlparse, parse_qsl
 
+from IPC import Crypto
+
+
 class Base(metaclass=abc.ABCMeta):
     """
 *  Base API Class. Contains basic API-connection methods.
@@ -38,10 +41,8 @@ class Base(metaclass=abc.ABCMeta):
     * 
     *  @return boolean
         """
-        pubKeyId = openssl_get_publickey(pubKey)
-        res = openssl_verify(data, base64.b64decode(signature), pubKeyId, Defines.SIGNATURE_ALGO)
-        openssl_free_key(pubKeyId)
-        if res != 1:
+        res = Crypto.verify(data, base64.b64decode(signature), pubKey, Defines.SIGNATURE_ALGO)
+        if not res:
             return False
 
         return True
@@ -82,7 +83,7 @@ class Base(metaclass=abc.ABCMeta):
     * 
     *  @return string base64 encoded signature
         """
-        openssl_public_encrypt(data, crypted, self._getCnf().getEncryptPublicKey(), Defines.ENCRYPT_PADDING)
+        crypted = Crypto.encrypt(data, self._getCnf().getEncryptPublicKey())
 
         return base64.b64encode(crypted)
 
@@ -126,9 +127,9 @@ class Base(metaclass=abc.ABCMeta):
         __params = self.__params
         for k, v in __params:
             __params[k] = Helper.unescape(v)
-        concData = base64.b64encode(implode('-', __params))
-        privKey = openssl_get_privatekey(self._getCnf().getPrivateKey())
-        openssl_sign(concData, signature, privKey, Defines.SIGNATURE_ALGO)
+        concData = base64.b64encode('-'.join(str(x) for x in __params.values()))
+        privKey = self._getCnf().getPrivateKey()
+        signature = Crypto.sign(concData, privKey, Defines.SIGNATURE_ALGO)
 
         return base64.b64encode(signature)
 
@@ -141,17 +142,22 @@ class Base(metaclass=abc.ABCMeta):
         """
         self.__params['Signature'] = self.__createSignature()
         url = urlparse(self._getCnf().getIpcURL())
-        ssl = "" # JSON.parse({"url": ""})
+        secure = False # JSON.parse({"url": ""})
         if not url.port:
             if url.scheme == 'https':
                 url.port = 443
-                ssl = "ssl://"
+                secure = True
             else:
                 url.port = 80
         postData = urlencode(self.__params)
         # TODO mayby add try catch construction
         # TODO: add ssl
-        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #tcp socket
+        if secure:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #tcp socket
+        else:
+            raw_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock = ssl.wrap_socket(raw_sock, ssl_version=ssl.PROTOCOL_TLSv1, ciphers="ADH-AES256-SHA")
+
         sock.connect((url.hostname, url.port))
         fp = sock.makefile()
         # fsockopen(f"{ssl}{url.hostname}", url.port, errno, errstr, 10)
@@ -160,19 +166,24 @@ class Base(metaclass=abc.ABCMeta):
         else:
             eol = "\r\n"
             path = url.path + ('' if (bool(url.query)) else ('?' + url.query))
-            fp.write(f"POST {path} HTTP/1.1{eol}")
-            fp.write(f"Host: {url.hostname}{eol}")
-            fp.write(f"Content-type: application/x-www-form-urlencoded{eol}")
-            fp.write(f"Content-length: {len(postData)}{eol}")
-            fp.write(f"Connection: close{eol}{eol}")
-            fp.write(f"{postData}{eol}{eol}")
+            req = f"POST {path} HTTP/1.1{eol}"
+            req += f"Host: {url.hostname}{eol}"
+            req += f"Content-type: application/x-www-form-urlencoded{eol}"
+            req += f"Content-length: {len(postData)}{eol}"
+            req += f"Connection: close{eol}{eol}"
+            req += f"{postData}{eol}{eol}"
+
+            sock.send(req)
 
             result = ''
-            line = fp.readline(1024)
-            while (line):
+            line = sock.recv(1024)
+            while line:
                 result += line
-                line = fp.readline(1024)
+                line = sock.recv(1024)
+
             fp.close()
+            sock.close()
+
             result = result.split("{eol}{eol}", 2)[:-2]
             header = result[0] if len(result) > 0 else ''
             cont = result[1] if len(result) > 1 else ''
