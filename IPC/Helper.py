@@ -1,5 +1,9 @@
 from IPC.Defines import Defines
+from django.core.validators import URLValidator, validate_email, validate_ipv46_address
+from django.core.exceptions import ValidationError
+from html import escape as html_escape, unescape as html_unescape
 import re
+from html.entities import entitydefs
 
 
 class Helper(object):
@@ -10,7 +14,7 @@ class Helper(object):
         pass
 
     @staticmethod
-    def isValidEmail(email):
+    def isValidEmail(email: str):
         """
     *  Validate email address
     * 
@@ -18,11 +22,19 @@ class Helper(object):
     * 
     *  @return boolean
         """
-        return filter_var(email, FILTER_VALIDATE_EMAIL)
+        # if len(email) > 7:
+        #  return bool(re.match(
+        #      "^.+@(\[?)[a-zA-Z0-9-.]+.([a-zA-Z]{2,3}|[0-9]{1,3})(]?)$", email))
+        try:
+            validate_email(email)
+        except ValidationError:
+            return False
+        else:
+            return True
 
 
     @staticmethod
-    def isValidURL(url):
+    def isValidURL(url: str):
         """
     *  Validate URL address
     * 
@@ -30,11 +42,17 @@ class Helper(object):
     * 
     *  @return boolean
         """
-        return filter_var(url, FILTER_VALIDATE_URL)
+        try:
+            validator = URLValidator()
+            _value = validator(url)
+        except ValidationError:
+            return False
+        else:
+            return True
 
 
     @staticmethod
-    def isValidIP(ip):
+    def isValidIP(ip: str):
         """
     *  Validate IP address
     * 
@@ -42,11 +60,16 @@ class Helper(object):
     * 
     *  @return boolean
         """
-        return filter_var(ip, FILTER_VALIDATE_IP)
+        try:
+            validate_ipv46_address(ip)
+        except ValidationError:
+            return False
+        else:
+            return True
 
 
     @staticmethod
-    def isValidName(name):
+    def isValidName(name: str):
         """
     *  Validate customer names
     * 
@@ -54,7 +77,7 @@ class Helper(object):
     * 
     *  @return boolean
         """
-        return re.search("/^[a-zA-Z ]*/", name)
+        return bool(re.match("/^[a-zA-Z ]*/", name))
 
 
     @staticmethod
@@ -66,7 +89,7 @@ class Helper(object):
     * 
     *  @return boolean
         """
-        return re.search('/^(-)?[0-9]+(?:\.[0-9]{0,2})?/', amt)
+        return bool(re.match('/^(-)?[0-9]+(?:\.[0-9]{0,2})?/', amt))
 
 
     @staticmethod
@@ -123,7 +146,7 @@ class Helper(object):
 
 
     @staticmethod
-    def isValidCardNumber(cardNo):
+    def isValidCardNumber(cardNo: str):
         """
     *  Validate card number
     * 
@@ -138,7 +161,7 @@ class Helper(object):
         even = 0
         for i in range(len(cardNo) - 1, -1, -1):
             if even == 1:
-                dub = 2 * cardNo[i]
+                dub = 2 * int(cardNo[i])
                 if dub > 9:
                     add = dub - 9
                 else:
@@ -165,11 +188,11 @@ class Helper(object):
 
     @staticmethod
     def versionCheck(current, required):
-        return (int)str_replace('.', '', current) >= (int)str_replace('.', '', required)
+        return int(current.replace('.', '')) >= int(required.replace('.', ''))
 
 
     @staticmethod
-    def escape(text):
+    def escape(text: str):
         """
     *  Escape HTML special chars
     * 
@@ -177,9 +200,8 @@ class Helper(object):
     * 
     *  @return string type
         """
-        text = htmlspecialchars_decode(text, ENT_QUOTES)
-
-        return htmlspecialchars(text, ENT_QUOTES)
+        #('\'', '&#039;').replace('"', '&quot;') # ENT_QUOTES
+        return html_escape(text) 
 
 
     @staticmethod
@@ -191,7 +213,7 @@ class Helper(object):
     * 
     *  @return string
         """
-        return htmlspecialchars_decode(text, ENT_QUOTES)
+        return html_unescape(text)
 
 
     @staticmethod
@@ -208,18 +230,18 @@ class Helper(object):
     * 
     *  @return mixed
         """
-        # TODO: select one of (list, tuple)
-        if not isinstance(array, (list, tuple)):
+        # TODO: select one of (list, dict)
+        if not isinstance(array, (list, dict)):
             return default
         if notEmpty:
-            if array_key_exists(key, array):
-                val = trim(array[key])
+            if key in array:
+                val = array[key].strip()
                 if bool(val):
                     return val
 
             return default
         else:
-            return array[key] if array_key_exists(key, array) else default
+            return array[key] if (key in array) else default
 
 
     @staticmethod
@@ -233,12 +255,12 @@ class Helper(object):
     * 
     *  @return array
         """
-        # TODO: select one of (list, tuple)
-        if not isinstance(array, (list, tuple)):
+        # TODO: select one of (list, dict)
+        if not isinstance(array, (list, dict)):
             return values
         for k, v in array:
-            # TODO: select one of (list, tuple)
-            if isinstance(v, (list, tuple)):
+            # TODO: select one of (list, dict)
+            if isinstance(v, (list, dict)):
                 values = Helper.getValuesFromMultiDimensionalArray(v, values)
             else:
                 values += v

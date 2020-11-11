@@ -1,4 +1,5 @@
 import base64
+import json
 from typing import Dict
 from IPC.Defines import Defines
 from IPC.Config import Config
@@ -43,11 +44,11 @@ class Response(object):
         self.__raw_data = raw_data
 
         if format == Defines.COMMUNICATION_FORMAT_JSON:
-            self.__data = Dict[str, str](json_decode(self.__raw_data, 1))
+            self.__data = Dict[str, str](json.loads(self.__raw_data))
         elif format == Defines.COMMUNICATION_FORMAT_XML:
             self.__data = Dict[str, str](SimpleXMLElement(self.__raw_data))
             if self.__data['@attributes']):
-                unset(self.__data['@attributes'])
+                del self.__data['@attributes']
         elif format == Defines.COMMUNICATION_FORMAT_POST:
             self.__data = self.__raw_data
         else:
@@ -58,7 +59,7 @@ class Response(object):
 
         self.__extractSignature()
 
-        if not bool(self.__signature) and array_key_exists('Status', self.__data) and self.__data['Status'] == Defines.STATUS_IPC_ERROR:
+        if not bool(self.__signature) and ('Status' in self.__data) and self.__data['Status'] == Defines.STATUS_IPC_ERROR:
             raise IPC_Exception('IPC Response - General Error!')
 
         self.__verifySignature()
@@ -66,12 +67,12 @@ class Response(object):
         return self
 
     def __extractSignature(self):
-        # TODO: select one of (list, tuple)
-        if bool(self.__data) and isinstance(self.__data, (list, tuple)):
-            for k, v in self.__data :
-                if strtolower(k) == '__signature':
+        # TODO: select one of (list, dict)
+        if bool(self.__data) and isinstance(self.__data, (list, dict)):
+            for k, v in self.__data:
+                if k.lower() == '__signature':
                     self.__signature = v
-                    unset(self.__data[k])
+                    del self.__data[k]
 
         return True
 

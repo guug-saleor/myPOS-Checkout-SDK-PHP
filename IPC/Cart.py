@@ -71,8 +71,8 @@ class Cart(object):
     *
     * @return int
         """
-        # TODO: select one of (list, tuple)
-        return self.__cart.count if (bool(self.__cart) and isinstance(self.__cart, (list, tuple))) else 0
+        # TODO: select one of (list, dict)
+        return self.__cart.count if (bool(self.__cart) and isinstance(self.__cart, (list, dict))) else 0
 
     def validate(self):
         """

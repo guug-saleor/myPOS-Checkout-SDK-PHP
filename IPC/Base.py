@@ -1,4 +1,7 @@
 import abc
+import socket
+import ssl
+from urllib.parse import urlencode
 # from Crypto.Hash import SHA256
 # from Crypto.PublicKey import RSA
 # from Crypto.Signature import PKCS1_v1_5 as Signature_pkcs1_v1_5
@@ -145,9 +148,13 @@ class Base(metaclass=abc.ABCMeta):
                 ssl = "ssl://"
             else:
                 url.port = 80
-        postData = http_build_query(self.__params)
+        postData = urlencode(self.__params)
         # TODO mayby add try catch construction
-        fp = fsockopen(f"{ssl}{url.hostname}", url.port, errno, errstr, 10)
+        # TODO: add ssl
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #tcp socket
+        sock.connect((url.hostname, url.port))
+        fp = sock.makefile()
+        # fsockopen(f"{ssl}{url.hostname}", url.port, errno, errstr, 10)
         if not fp:
             raise IPC_Exception('Error connecting IPC URL')
         else:
@@ -166,17 +173,17 @@ class Base(metaclass=abc.ABCMeta):
                 result += line
                 line = fp.readline(1024)
             fp.close()
-            result = explode(f"{eol}{eol}", result, 2)
-            header = result[0] if result.length > 0 else ''
-            cont = result[1] if result.length > 1 else ''
+            result = result.split("{eol}{eol}", 2)[:-2]
+            header = result[0] if len(result) > 0 else ''
+            cont = result[1] if len(result) > 1 else ''
 
             #Check Transfer-Encoding: chunked
-            if bool(cont) and strpos(header, 'Transfer-Encoding: chunked') != False:
+            if bool(cont) and 'Transfer-Encoding: chunked' in header:
                 check = self.__httpChunkedDecode(cont)
                 if check:
                     cont = check
             if cont:
-                cont = trim(cont)
+                cont = cont.strip()
 
             return Response.getInstance(self._getCnf(), cont, self._outputFormat)
 
@@ -191,19 +198,18 @@ class Base(metaclass=abc.ABCMeta):
         pos = 0
         len = len(chunk)
         dechunk = None
-        newlineAt = strpos(chunk, "\n", pos + 1)
-        chunkLenHex = substr(chunk, pos, newlineAt - pos)
+        newlineAt = chunk.find("\n", pos + 1)
 
-        while pos < len and chunkLenHex:
+        while pos < len and newlineAt:
+            chunkLenHex = chunk[pos:pos + newlineAt - pos]
             if self.__is_hex(chunkLenHex):
                 return False
 
             pos = newlineAt + 1
-            chunkLen = hexdec(rtrim(chunkLenHex, "\r\n"))
-            dechunk += substr(chunk, pos, chunkLen)
-            pos = strpos(chunk, "\n", pos + chunkLen) + 1
-            newlineAt = strpos(chunk, "\n", pos + 1)
-            chunkLenHex = substr(chunk, pos, newlineAt - pos)
+            chunkLen = int(chunkLenHex.rstrip("\r\n"), 16)
+            dechunk += chunk[pos:pos + chunkLen]
+            pos = chunk.find("\n", pos + chunkLen) + 1
+            newlineAt = chunk.find("\n", pos + 1)
 
 
         return dechunk
@@ -217,9 +223,9 @@ class Base(metaclass=abc.ABCMeta):
     *  @return boolean True if the string is a hex, otherwise False
         """
         # regex is for weenies
-        hex = strtolower(trim(ltrim(hex, "0")))
+        hex = hex.lstrip("0").strip().lower()
         if not bool(hex):
             hex = "0"
-        dec = hexdec(hex)
+        dec = int(hex, 16)
 
-        return hex == dechex(dec)
+        return hex == "%x" % dec
