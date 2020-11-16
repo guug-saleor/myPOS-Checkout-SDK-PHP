@@ -21,18 +21,15 @@ class IAPurchase(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setOrderID(self, orderID: str):
         """
-    * Purchase identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Purchase identifier - must be unique\n
+    * @param string orderID\n
     * @return IAPurchase
         """
         self.__orderID = orderID
@@ -41,10 +38,8 @@ class IAPurchase(Base):
 
     def setNote(self, note: str):
         """
-    * Optional note to purchase
-    *
-    * @param string note
-    *
+    * Optional note to purchase\n
+    * @param string note\n
     * @return IAPurchase
         """
         self.__note = note
@@ -53,16 +48,14 @@ class IAPurchase(Base):
 
     def setAccountSettlement(self, accountSettlement: str):
         """
-    * Account for payment settlement
-    *
+    * Account for payment settlement\n
     * @param string accountSettlement
         """
         self.__accountSettlement = accountSettlement
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
         """
         self.validate()
@@ -110,13 +103,12 @@ class IAPurchase(Base):
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
         if self.getCurrency() == None:
-            raise IPC_Exception('Invalid __currency')
+            raise IPC_Exception('Invalid currency')
 
         try:
             self._getCnf().validate()
@@ -143,18 +135,15 @@ class IAPurchase(Base):
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return IAPurchase
         """
         self.__currency = currency
@@ -163,18 +152,15 @@ class IAPurchase(Base):
 
     def getCart(self):
         """
-    * Cart object
-    *
+    * Cart object\n
     * @return Cart
         """
         return self.__cart
 
     def setCart(self, cart: Cart):
         """
-    * Cart object
-    *
-    * @param cart: Cart
-    *
+    * Cart object\n
+    * @param cart: Cart\n
     * @return IAPurchase
         """
         self.__cart = cart
@@ -183,40 +169,35 @@ class IAPurchase(Base):
 
     def getCard(self):
         """
-    * Card object
-    *
+    * Card object\n
     * @return Card
         """
         return self.__card
 
     def setCard(self, card: Card):
         """
-    * Card object
-    *
+    * Card object\n
     * @param Card card
         """
         self.__card = card
 
     def getOrderID(self):
         """
-    * Purchase identifier
-    *
+    * Purchase identifier\n
     * @return string
         """
         return self.__orderID
 
     def getAccountSettlement(self):
         """
-    * Account for payment settlement
-    *
+    * Account for payment settlement\n
     * @return string
         """
         return self.__accountSettlement
 
     def getNote(self):
         """
-    * Optional note to purchase
-    *
+    * Optional note to purchase\n
     * @return string
         """
         return self.__note

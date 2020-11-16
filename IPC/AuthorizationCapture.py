@@ -15,18 +15,15 @@ class AuthorizationCapture(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setOrderID(self, orderID: str):
         """
-    * Purchase identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Purchase identifier - must be unique\n
+    * @param string orderID\n
     * @return AuthorizationCapture
         """
         self.__orderID = orderID
@@ -35,10 +32,8 @@ class AuthorizationCapture(Base):
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return AuthorizationCapture
         """
         self.__currency = currency
@@ -47,10 +42,8 @@ class AuthorizationCapture(Base):
 
     def setAmount(self, amount: float):
         """
-    *  The amount for completion
-    * 
-    * @param mixed amount
-    *
+    *  The amount for completion\n
+    * @param mixed amount\n
     * @return AuthorizationCapture
         """
         self.__amount = amount
@@ -59,8 +52,7 @@ class AuthorizationCapture(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
     * @raises IPC_Exception
         """
@@ -78,15 +70,14 @@ class AuthorizationCapture(Base):
 
         self._addPostParam('Amount', self.getAmount())
         self._addPostParam('Currency', self.getCurrency())
-        
+
         self._addPostParam('OutputFormat', self.getOutputFormat())
 
         return self._processPost()
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -99,34 +90,31 @@ class AuthorizationCapture(Base):
             raise IPC_Exception('IPCVersion ' + self._getCnf().getVersion() + ' does not support IPCAuthorizationCapture method. Please use 1.4 or above.')
 
         if self.getCurrency() == None:
-            raise IPC_Exception('Invalid __currency')
+            raise IPC_Exception('Invalid currency')
 
         if self.getAmount() == None or not Helper.isValidAmount(self.getAmount()):
             raise IPC_Exception('Empty or invalid amount')
-        
+
         return True
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def getOrderID(self):
         """
-    * Purchase identifier
-    *
+    * Purchase identifier\n
     * @return string
         """
         return self.__orderID
-    
+
     def getAmount(self):
         """
-    *  The amount for completion
-    *
+    *  The amount for completion\n
     * @return mixed
         """
         return self.__amount
-    
+

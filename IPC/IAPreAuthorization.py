@@ -21,18 +21,15 @@ class IAPreAuthorization(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setOrderID(self, orderID: str):
         """
-    * Purchase identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Purchase identifier - must be unique\n
+    * @param string orderID\n
     * @return IAPreAuthorization
         """
         self.__orderID = orderID
@@ -41,10 +38,8 @@ class IAPreAuthorization(Base):
 
     def setItemName(self, itemName: str):
         """
-    * Item Name of the PreAuthorization
-    *
-    * @param mixed itemName
-    *
+    * Item Name of the PreAuthorization\n
+    * @param mixed itemName\n
     * @return IAPreAuthorization
         """
         self.__itemName = itemName
@@ -53,10 +48,8 @@ class IAPreAuthorization(Base):
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return IAPreAuthorization
         """
         self.__currency = currency
@@ -65,10 +58,8 @@ class IAPreAuthorization(Base):
 
     def setAmount(self, amount: float):
         """
-    * Total amount of the PreAuthorization
-    *
-    * @param mixed amount
-    *
+    * Total amount of the PreAuthorization\n
+    * @param mixed amount\n
     * @return IAPreAuthorization
         """
         self.__amount = amount
@@ -77,10 +68,8 @@ class IAPreAuthorization(Base):
 
     def setCard(self, card: Card):
         """
-    * Card object
-    *
-    * @param Card card
-    *
+    * Card object\n
+    * @param Card card\n
     * @return IAPreAuthorization
         """
         self.__card = card
@@ -89,10 +78,8 @@ class IAPreAuthorization(Base):
 
     def setNote(self, note: str):
         """
-    * Optional note to purchase
-    *
-    * @param string note
-    *
+    * Optional note to purchase\n
+    * @param string note\n
     * @return IAPreAuthorization
         """
         self.__note = note
@@ -102,8 +89,7 @@ class IAPreAuthorization(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
     * @raises IPC_Exception
         """
@@ -140,8 +126,7 @@ class IAPreAuthorization(Base):
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -157,7 +142,7 @@ class IAPreAuthorization(Base):
             raise IPC_Exception('Empty or invalid item name.')
 
         if self.getCurrency() == None:
-            raise IPC_Exception('Invalid __currency')
+            raise IPC_Exception('Invalid currency')
 
         if self.getAmount() == None or not Helper.isValidAmount(self.getAmount()):
             raise IPC_Exception('Empty or invalid amount')
@@ -177,48 +162,42 @@ class IAPreAuthorization(Base):
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def getCard(self):
         """
-    * Card object
-    *
+    * Card object\n
     * @return Card
         """
         return self.__card
 
     def getOrderID(self):
         """
-    * Purchase identifier
-    *
+    * Purchase identifier\n
     * @return string
         """
         return self.__orderID
 
     def getItemName(self):
         """
-    * Item Name for the PreAuthorization
-    *
+    * Item Name for the PreAuthorization\n
     * @return mixed
         """
         return self.__itemName
 
     def getAmount(self):
         """
-    * Total amount of the PreAuthorization
-    *
+    * Total amount of the PreAuthorization\n
     * @return mixed
         """
         return self.__amount
 
     def getNote(self):
         """
-    * Optional note to purchase
-    *
+    * Optional note to purchase\n
     * @return string
         """
         return self.__note

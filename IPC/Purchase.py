@@ -37,8 +37,7 @@ class Purchase(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self.__paymentMethod = self.PAYMENT_METHOD_BOTH
@@ -46,10 +45,8 @@ class Purchase(Base):
 
     def setOrderID(self, orderID: str):
         """
-    * Purchase identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Purchase identifier - must be unique\n
+    * @param string orderID\n
     * @return Purchase
         """
         self.__orderID = orderID
@@ -58,10 +55,8 @@ class Purchase(Base):
 
     def setNote(self, note: str):
         """
-    * Optional note to purchase
-    *
-    * @param string note
-    *
+    * Optional note to purchase\n
+    * @param string note\n
     * @return Purchase
         """
         self.__note = note
@@ -70,10 +65,8 @@ class Purchase(Base):
 
     def setUrlCancel(self, urlCancel: str):
         """
-    * Merchant Site URL where client comes after unsuccessful payment
-    *
-    * @param string urlCancel
-    *
+    * Merchant Site URL where client comes after unsuccessful payment\n
+    * @param string urlCancel\n
     * @return Purchase
         """
         self.__url_cancel = urlCancel
@@ -82,10 +75,8 @@ class Purchase(Base):
 
     def setUrlNotify(self, urlNotify: str):
         """
-    * Merchant Site URL where IPC posts Purchase Notify requests
-    *
-    * @param string urlNotify
-    *
+    * Merchant Site URL where IPC posts Purchase Notify requests\n
+    * @param string urlNotify\n
     * @return Purchase
         """
         self.__url_notify = urlNotify
@@ -94,24 +85,21 @@ class Purchase(Base):
 
     def setCardTokenRequest(self, cardTokenRequest: int):
         """
-    * Whether to return Card Token for current client card
-    *
+    * Whether to return Card Token for current client card\n
     * @param integer cardTokenRequest
         """
         self.__cardTokenRequest = cardTokenRequest
 
     def setPaymentParametersRequired(self, paymentParametersRequired: int):
         """
-    * Defines the packet of details needed from merchant and client to make payment
-    *
+    * Defines the packet of details needed from merchant and client to make payment\n
     * @param integer paymentParametersRequired
         """
         self.__paymentParametersRequired = paymentParametersRequired
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -171,8 +159,7 @@ class Purchase(Base):
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -200,7 +187,7 @@ class Purchase(Base):
             raise IPC_Exception('Invalid value provided for PaymentParametersRequired params')
 
         if self.getCurrency() == None:
-            raise IPC_Exception('Invalid __currency')
+            raise IPC_Exception('Invalid currency')
 
         try:
             self._getCnf().validate()
@@ -228,34 +215,29 @@ class Purchase(Base):
 
     def getUrlCancel(self):
         """
-    * Merchant Site URL where client comes after unsuccessful payment
-    *
+    * Merchant Site URL where client comes after unsuccessful payment\n
     * @return string
         """
         return self.__url_cancel
 
     def getUrlNotify(self):
         """
-    * Merchant Site URL where IPC posts Purchase Notify requests
-    *
+    * Merchant Site URL where IPC posts Purchase Notify requests\n
     * @var string
         """
         return self.__url_notify
 
     def getUrlOk(self):
         """
-    * Merchant Site URL where client comes after successful payment
-    *
+    * Merchant Site URL where client comes after successful payment\n
     * @return string
         """
         return self.__url_ok
 
     def setUrlOk(self, urlOk: str):
         """
-    * Merchant Site URL where client comes after successful payment
-    *
-    * @param string urlOk
-    *
+    * Merchant Site URL where client comes after successful payment\n
+    * @param string urlOk\n
     * @return Purchase
         """
         self.__url_ok = urlOk
@@ -264,34 +246,29 @@ class Purchase(Base):
 
     def getCardTokenRequest(self):
         """
-    * Whether to return Card Token for current client card
-    *
+    * Whether to return Card Token for current client card\n
     * @return integer
         """
         return self.__cardTokenRequest
 
     def getPaymentParametersRequired(self):
         """
-    * Defines the packet of details needed from merchant and client to make payment
-    *
+    * Defines the packet of details needed from merchant and client to make payment\n
     * @return integer
         """
         return self.__paymentParametersRequired
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return Purchase
         """
         self.__currency = currency
@@ -300,26 +277,22 @@ class Purchase(Base):
 
     def __isNoCartPurchase(self):
         """
-    * If request is only for card token request without payment, the Amount and Cart params are not required
-    *
+    * If request is only for card token request without payment, the Amount and Cart params are not required\n
     * @return bool
         """
         return self.getCardTokenRequest() == self.CARD_TOKEN_REQUEST_ONLY_STORE
 
     def getCart(self):
         """
-    * Cart object
-    *
+    * Cart object\n
     * @return Cart
         """
         return self.__cart
 
     def setCart(self, cart: Cart):
         """
-    * Cart object
-    *
-    * @param cart: Cart
-    *
+    * Cart object\n
+    * @param cart: Cart\n
     * @return Purchase
         """
         self.__cart = cart
@@ -334,10 +307,8 @@ class Purchase(Base):
 
     def setCustomer(self, customer: Customer):
         """
-    * Customer object
-    *
-    * @param customer: Customer
-    *
+    * Customer object\n
+    * @param customer: Customer\n
     * @return Purchase
         """
         self.__customer = customer
@@ -346,16 +317,14 @@ class Purchase(Base):
 
     def getOrderID(self):
         """
-    * Purchase identifier
-    *
+    * Purchase identifier\n
     * @return string
         """
         return self.__orderID
 
     def getNote(self):
         """
-    * Optional note to purchase
-    *
+    * Optional note to purchase\n
     * @return string
         """
         return self.__note

@@ -20,18 +20,15 @@ class PreAuthorization(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return PreAuthorization object
-    *
+    * Return PreAuthorization object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setOrderID(self, orderID: str):
         """
-    * PreAuthorization identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * PreAuthorization identifier - must be unique\n
+    * @param string orderID\n
     * @return PreAuthorization
         """
         self.__orderID = orderID
@@ -40,8 +37,7 @@ class PreAuthorization(Base):
 
     def setItemName(self, itemName: str):
         """
-    * @param string itemName
-    *
+    * @param string itemName\n
     * @return PreAuthorization
         """
         self.__itemName = itemName
@@ -50,10 +46,8 @@ class PreAuthorization(Base):
 
     def setAmount(self, amount: float):
         """
-    * Total amount of the PreAuthorization
-    *
-    * @param float amount
-    *
+    * Total amount of the PreAuthorization\n
+    * @param float amount\n
     * @return PreAuthorization
         """
         self.__amount = amount
@@ -63,10 +57,8 @@ class PreAuthorization(Base):
 
     def setNote(self, note: str):
         """
-    * Optional note for PreAuthorization
-    *
-    * @param string note
-    *
+    * Optional note for PreAuthorization\n
+    * @param string note\n
     * @return PreAuthorization
         """
         self.__note = note
@@ -75,10 +67,8 @@ class PreAuthorization(Base):
 
     def setUrlCancel(self, urlCancel: str):
         """
-    * Merchant Site URL where client comes after unsuccessful payment
-    *
-    * @param string urlCancel
-    *
+    * Merchant Site URL where client comes after unsuccessful payment\n
+    * @param string urlCancel\n
     * @return PreAuthorization
         """
         self.__url_cancel = urlCancel
@@ -87,10 +77,8 @@ class PreAuthorization(Base):
 
     def setUrlNotify(self, urlNotify: str):
         """
-    * Merchant Site URL where IPC posts PreAuthorization Notify requests
-    *
-    * @param string urlNotify
-    *
+    * Merchant Site URL where IPC posts PreAuthorization Notify requests\n
+    * @param string urlNotify\n
     * @return PreAuthorization
         """
         self.__url_notify = urlNotify
@@ -99,8 +87,7 @@ class PreAuthorization(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -132,8 +119,7 @@ class PreAuthorization(Base):
 
     def validate(self):
         """
-    * Validate all set PreAuthorization details
-    *
+    * Validate all set PreAuthorization details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -156,7 +142,7 @@ class PreAuthorization(Base):
             raise IPC_Exception('Empty or invalid amount')
 
         if self.getCurrency()  == None:
-            raise IPC_Exception('Invalid __currency')
+            raise IPC_Exception('Invalid currency')
 
         try:
             self._getCnf().validate()
@@ -167,34 +153,29 @@ class PreAuthorization(Base):
 
     def getUrlCancel(self):
         """
-    * Merchant Site URL where client comes after unsuccessful payment
-    *
+    * Merchant Site URL where client comes after unsuccessful payment\n
     * @return string
         """
         return self.__url_cancel
 
     def getUrlNotify(self):
         """
-    * Merchant Site URL where IPC posts PreAuthorization Notify requests
-    *
+    * Merchant Site URL where IPC posts PreAuthorization Notify requests\n
     * @var string
         """
         return self.__url_notify
 
     def getUrlOk(self):
         """
-    * Merchant Site URL where client comes after successful payment
-    *
+    * Merchant Site URL where client comes after successful payment\n
     * @return string
         """
         return self.__url_ok
 
     def setUrlOk(self, urlOk: str):
         """
-    * Merchant Site URL where client comes after successful payment
-    *
-    * @param string urlOk
-    *
+    * Merchant Site URL where client comes after successful payment\n
+    * @param string urlOk\n
     * @return PreAuthorization
         """
         self.__url_ok = urlOk
@@ -203,18 +184,15 @@ class PreAuthorization(Base):
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return PreAuthorization
         """
         self.__currency = currency
@@ -224,8 +202,7 @@ class PreAuthorization(Base):
 
     def getOrderID(self):
         """
-    * PreAuthorization identifier
-    *
+    * PreAuthorization identifier\n
     * @return string
         """
         return self.__orderID
@@ -238,16 +215,14 @@ class PreAuthorization(Base):
 
     def getAmount(self):
         """
-    * Total amount of the PreAuthorization
-    *
+    * Total amount of the PreAuthorization\n
     * @return float
         """
         return self.__amount
 
     def getNote(self):
         """
-    * Optional note to PreAuthorization
-    *
+    * Optional note to PreAuthorization\n
     * @return string
         """
         return self.__note

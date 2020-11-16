@@ -13,7 +13,7 @@ from IPC.IPC_Exception import IPC_Exception
 
 class Response(object):
     """
- * IPC Response class. Parse and validate income __data
+ * IPC Response class. Parse and validate income data
     """
     __cnf: Config
     __raw_data = None
@@ -23,11 +23,9 @@ class Response(object):
 
     def __init__(self, cnf: Config, raw_data, format):
         """
-    *
     * @param cnf: Config
     * @param string|array raw_data
-    * @param string format COMMUNICATION_FORMAT_JSON|COMMUNICATION_FORMAT_XML|COMMUNICATION_FORMAT_POST
-    *
+    * @param string format COMMUNICATION_FORMAT_JSON|COMMUNICATION_FORMAT_XML|COMMUNICATION_FORMAT_POST\n
     * @raises IPC_Exception
         """
         self.__cnf = cnf
@@ -36,8 +34,7 @@ class Response(object):
     def __setData(self, raw_data, format):
         """
     * @param raw_data
-    * @param format
-    *
+    * @param format\n
     * @return self
     * @raises IPC_Exception
         """
@@ -85,7 +82,7 @@ class Response(object):
     * @raises IPC_Exception
         """
         if not bool(self.__signature):
-            raise IPC_Exception('Missing request __signature!')
+            raise IPC_Exception('Missing request signature!')
 
         if not self.__cnf:
             raise IPC_Exception('Missing config object!')
@@ -95,18 +92,16 @@ class Response(object):
             raise IPC_Exception('Signature check failed!')
 
     def __getSignData(self):
-        return base64.b64encode('-'.join(list(Helper.getValuesFromMultiDimensionalArray(self.__data))))
+        return base64.b64encode('-'.join(list(Helper.getValuesFromMultiDimensionalArray(self.__data))).encode('utf-8'))
 
 
     @staticmethod
     def getInstance(cnf: Config, raw_data, format: str):
         """
-    * Static class to create Response object
-    *
+    * Static class to create Response object\n
     * @param cnf: Config
     * @param string|array raw_data
-    * @param string format
-    *
+    * @param string format\n
     * @return Response
     * @raises IPC_Exception
         """
@@ -114,8 +109,7 @@ class Response(object):
 
     def isSignatureCorrect(self):
         """
-    * Validate Signature param from IPC response
-    *
+    * Validate Signature param from IPC response\n
     * @return boolean
         """
         try:
@@ -127,8 +121,7 @@ class Response(object):
 
     def getSignature(self):
         """
-    * Request param: Signature
-    *
+    * Request param: Signature\n
     * @return string
         """
         return self.__signature
@@ -137,8 +130,7 @@ class Response(object):
 
     def getStatus(self):
         """
-    * Request param: Status
-    *
+    * Request param: Status\n
     * @return int
     * @raises IPC_Exception
         """
@@ -146,10 +138,8 @@ class Response(object):
 
     def getData(self, case = None):
         """
-    * Return IPC Response in array
-    *
-    * @param function case str.lower|str.upper
-    *
+    * Return IPC Response in array\n
+    * @param function case str.lower|str.upper\n
     * @return array
     * @raises IPC_Exception
         """
@@ -167,8 +157,7 @@ class Response(object):
 
     def getStatusMsg(self):
         """
-    * Request param: StatusMsg
-    *
+    * Request param: StatusMsg\n
     * @return string
     * @raises IPC_Exception
         """
@@ -176,8 +165,7 @@ class Response(object):
 
     def getDataRaw(self):
         """
-    * Return IPC Response in original format json/xml/array
-    *
+    * Return IPC Response in original format json/xml/array\n
     * @return string|array
         """
         return self.__raw_data

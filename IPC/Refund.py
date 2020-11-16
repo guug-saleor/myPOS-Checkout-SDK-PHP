@@ -17,26 +17,22 @@ class Refund(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return Refund object
-    *
+    * Return Refund object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setAmount(self, amount: float):
         """
-    * Refund amount
-    *
+    * Refund amount\n
     * @param float amount
         """
         self.__amount = amount
 
     def setTrnref(self, trnref: str):
         """
-    * Transaction reference - transaction unique identifier
-    *
-    * @param string trnref
-    *
+    * Transaction reference - transaction unique identifier\n
+    * @param string trnref\n
     * @return Refund
         """
         self.__trnref = trnref
@@ -45,10 +41,8 @@ class Refund(Base):
 
     def setOrderID(self, orderID: str):
         """
-    * Request identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Request identifier - must be unique\n
+    * @param string orderID\n
     * @return Refund
         """
         self.__orderID = orderID
@@ -57,8 +51,7 @@ class Refund(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -82,8 +75,8 @@ class Refund(Base):
         response = self._processPost().getData(str.lower)
         if (
             not response.get('ipc_trnref')
-            or (not response['amount'] or response['amount'] != self.getAmount()) 
-            or (not response['currency'] or response['currency'] != self.getCurrency()) 
+            or (not response['amount'] or response['amount'] != self.getAmount())
+            or (not response['currency'] or response['currency'] != self.getCurrency())
             or response['status'] != Defines.STATUS_SUCCESS
         ):
             return False
@@ -92,8 +85,7 @@ class Refund(Base):
 
     def validate(self):
         """
-    * Validate all set refund details
-    *
+    * Validate all set refund details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -121,26 +113,22 @@ class Refund(Base):
 
     def getAmount(self):
         """
-    * Refund amount
-    *
+    * Refund amount\n
     * @return float
         """
         return self.__amount
 
     def getCurrency(self):
         """
-    * ISO-4217 Three letter __currency code
-    *
+    * ISO-4217 Three letter currency code\n
     * @return string
         """
         return self.__currency
 
     def setCurrency(self, currency: str):
         """
-    * ISO-4217 Three letter __currency code
-    *
-    * @param string currency
-    *
+    * ISO-4217 Three letter currency code\n
+    * @param string currency\n
     * @return Refund
         """
         self.__currency = currency
@@ -149,16 +137,14 @@ class Refund(Base):
 
     def getTrnref(self):
         """
-    * Transaction reference - transaction unique identifier
-    *
+    * Transaction reference - transaction unique identifier\n
     * @return string
         """
         return self.__trnref
 
     def getOrderID(self):
         """
-    * Request identifier - must be unique
-    *
+    * Request identifier - must be unique\n
     * @return string
         """
         return self.__orderID

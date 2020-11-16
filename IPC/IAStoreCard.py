@@ -16,16 +16,14 @@ class IAStoreCard(CardStore):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
         """
         self.validate()
@@ -58,8 +56,7 @@ class IAStoreCard(CardStore):
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -81,16 +78,14 @@ class IAStoreCard(CardStore):
 
     def getCard(self):
         """
-    * Card object
-    *
+    * Card object\n
     * @return Card
         """
         return self.__card
 
     def setCard(self, card: Card):
         """
-    * Card object
-    *
+    * Card object\n
     * @param Card card
         """
         self.__card = card

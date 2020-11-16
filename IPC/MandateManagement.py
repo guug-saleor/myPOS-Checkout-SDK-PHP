@@ -18,40 +18,35 @@ class MandateManagement(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return Refund object
-    *
+    * Return Refund object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setCustomerWalletNumber(self, customerWalletNumber: str):
         """
-    * Identifier of the client’s (debtor’s) myPOS account
-    *
+    * Identifier of the client’s (debtor’s) myPOS account\n
     * @param string customerWalletNumber
         """
         self.__customerWalletNumber = customerWalletNumber
 
     def setAction(self, action: int):
         """
-    * Registration / Cancellation of a MandateReference
-    *
+    * Registration / Cancellation of a MandateReference\n
     * @param int action
         """
         self.__action = action
 
     def setMandateText(self, mandateText: str):
         """
-    * Text supplied from the merchant, so the client can easily identify the Mandate.
-    *
+    * Text supplied from the merchant, so the client can easily identify the Mandate.\n
     * @param string mandateText
         """
         self.__mandateText = mandateText
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
     * @raises IPC_Exception
         """
@@ -73,8 +68,7 @@ class MandateManagement(Base):
 
     def validate(self):
         """
-    * Validate all set refund details
-    *
+    * Validate all set refund details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -90,40 +84,35 @@ class MandateManagement(Base):
 
     def getMandateReference(self):
         """
-    * Unique identifier of the agreement (mandate) between the merchant and the client (debtor). Up to 127 characters.
-    *
+    * Unique identifier of the agreement (mandate) between the merchant and the client (debtor). Up to 127 characters.\n
     * @return string
         """
         return self.__mandateReference
 
     def setMandateReference(self, mandateReference: str):
         """
-    * Unique identifier of the agreement (mandate) between the merchant and the client (debtor). Up to 127 characters.
-    *
+    * Unique identifier of the agreement (mandate) between the merchant and the client (debtor). Up to 127 characters.\n
     * @param string mandateReference
         """
         self.__mandateReference = mandateReference
 
     def getCustomerWalletNumber(self):
         """
-    * Identifier of the client’s (debtor’s) myPOS account
-    *
+    * Identifier of the client’s (debtor’s) myPOS account\n
     * @return string
         """
         return self.__customerWalletNumber
 
     def getAction(self):
         """
-    * Registration / Cancellation of a MandateReference
-    *
+    * Registration / Cancellation of a MandateReference\n
     * @return int
         """
         return self.__action
 
     def getMandateText(self):
         """
-    * Text supplied from the merchant, so the client can easily identify the Mandate.
-    *
+    * Text supplied from the merchant, so the client can easily identify the Mandate.\n
     * @return string
         """
         return self.__mandateText

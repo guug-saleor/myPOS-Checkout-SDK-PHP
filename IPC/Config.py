@@ -30,10 +30,8 @@ class Config(object):
 
     def setPrivateKeyPath(self, path: str):
         """
-    *  Store __RSA key as a filepath
-    * 
-    *  @param string path File path
-    * 
+    *  Store RSA key as a filepath\n
+    *  @param string path File path\n
     *  @return Config
     *  @raises IPC_Exception
         """
@@ -45,18 +43,15 @@ class Config(object):
 
     def getAPIPublicKey(self):
         """
-    *  IPC API public RSA key
-    * 
+    *  IPC API public RSA key\n
     *  @return string
         """
         return self.__APIPublicKey
 
     def setAPIPublicKey(self, publicKey: str):
         """
-    *  IPC API public RSA key
-    * 
-    *  @param string publicKey
-    * 
+    *  IPC API public RSA key\n
+    *  @param string publicKey\n
     *  @return Config
         """
         self.__APIPublicKey = publicKey
@@ -65,10 +60,8 @@ class Config(object):
 
     def setAPIPublicKeyPath(self, path: str):
         """
-    *  IPC API public RSA key as a filepath
-    * 
-    *  @param string path
-    * 
+    *  IPC API public RSA key as a filepath\n
+    *  @param string path\n
     *  @return Config
     *  @raises IPC_Exception
         """
@@ -81,7 +74,7 @@ class Config(object):
     def getEncryptPublicKey(self):
         """
         *  Public RSA key using for encryption sensitive data
-        * 
+        *
         *  @return string
         """
         return self.__encryptPublicKey
@@ -100,10 +93,8 @@ class Config(object):
 
     def setEncryptPublicKeyPath(self, path: str):
         """
-    *  Public RSA key using for encryption sensitive data
-    * 
-    *  @param string path File path
-    * 
+    *  Public RSA key using for encryption sensitive data\n
+    *  @param string path File path\n
     *  @return Config
     *  @raises IPC_Exception
         """
@@ -115,18 +106,15 @@ class Config(object):
 
     def getLang(self):
         """
-    *  Language code (ISO 639-1)
-    * 
+    *  Language code (ISO 639-1)\n
     *  @return string
         """
         return self.__lang
 
     def setLang(self, lang: str):
         """
-    *  Language code (ISO 639-1)
-    * 
-    *  @param string lang
-    * 
+    *  Language code (ISO 639-1)\n
+    *  @param string lang\n
     *  @return Config
         """
         self.__lang = lang
@@ -135,18 +123,15 @@ class Config(object):
 
     def getDeveloperKey(self):
         """
-    *  Store __RSA key
-    * 
+    *  Store RSA key\n
     *  @return string
         """
         return self.__developerKey
 
     def setDeveloperKey(self, developerKey: str):
         """
-    *  Set myPOS developer key.
-    * 
-    *  @param string developerKey
-    * 
+    *  Set myPOS developer key.\n
+    *  @param string developerKey\n
     *  @return Config
         """
         self.__developerKey = developerKey
@@ -161,16 +146,14 @@ class Config(object):
 
     def setSource(self, source: str):
         """
-    *  Additional parameter to specify the __source of request
-    * 
+    *  Additional parameter to specify the source of request\n
     *  @param string source
         """
         self.__source = source
 
     def validate(self):
         """
-    *  Validate all set config details
-    * 
+    *  Validate all set config details\n
     *  @return boolean
     *  @raises IPC_Exception
         """
@@ -196,18 +179,15 @@ class Config(object):
 
     def getKeyIndex(self):
         """
-    *   Keyindex used for signing request
-    * 
+    *   Keyindex used for signing request\n
     *  @return string
         """
         return self.__keyIndex
 
     def setKeyIndex(self, keyIndex: int):
         """
-    *  Keyindex used for signing request
-    * 
-    *  @param int keyIndex
-    * 
+    *  Keyindex used for signing request\n
+    *  @param int keyIndex\n
     *  @return Config
         """
         self.__keyIndex = keyIndex
@@ -216,18 +196,15 @@ class Config(object):
 
     def getIpcURL(self):
         """
-    *  IPC API URL
-    * 
+    *  IPC API URL\n
     *  @return string
         """
         return self.__ipc_url
 
     def setIpcURL(self, ipc_url: str):
         """
-    *  IPC API URL
-    * 
-    *  @param string ipc_url
-    * 
+    *  IPC API URL\n
+    *  @param string ipc_url\n
     *  @return Config
         """
         self.__ipc_url = ipc_url
@@ -236,18 +213,15 @@ class Config(object):
 
     def getSid(self):
         """
-    *  Store ID
-    * 
+    *  Store ID\n
     *  @return int
         """
         return self.__sid
 
     def setSid(self, sid: int):
         """
-    *  Store ID
-    * 
-    *  @param int sid
-    * 
+    *  Store ID\n
+    *  @param int sid\n
     *  @return Config
         """
         self.__sid = sid
@@ -256,18 +230,15 @@ class Config(object):
 
     def getWallet(self):
         """
-    *  Wallet number
-    * 
+    *  Wallet number\n
     *  @return string
         """
         return self.__wallet
 
     def setWallet(self, wallet: str):
         """
-    *  Wallet number
-    * 
-    *  @param string wallet
-    * 
+    *  Wallet number\n
+    *  @param string wallet\n
     *  @return Config
         """
         self.__wallet = wallet
@@ -276,18 +247,15 @@ class Config(object):
 
     def getVersion(self):
         """
-    *  API Version
-    * 
+    *  API Version\n
     *  @return string
         """
         return self.__version
 
     def setVersion(self, version: str):
         """
-    *  API Version
-    * 
-    *  @param string version
-    * 
+    *  API Version\n
+    *  @param string version\n
     *  @return Config
         """
         self.__version = version
@@ -296,18 +264,15 @@ class Config(object):
 
     def getPrivateKey(self):
         """
-    *  Store __RSA key
-    * 
+    *  Store RSA key\n
     *  @return string
         """
         return self.__privateKey
 
     def setPrivateKey(self, privateKey: str):
         """
-    *  Store __RSA key
-    * 
-    *  @param string privateKey
-    * 
+    *  Store RSA key\n
+    *  @param string privateKey\n
     *  @return Config
         """
         self.__privateKey = privateKey
@@ -316,8 +281,7 @@ class Config(object):
 
     def loadConfigurationPackage(self, configurationPackage):
         """
-    *  Decrypt data string and set configuration parameters
-    * 
+    *  Decrypt data string and set configuration parameters\n
     *  @param string configurationPackage
     *  @return Config
     *  @raises IPC_Exception

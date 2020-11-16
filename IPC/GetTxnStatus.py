@@ -16,8 +16,7 @@ class GetTxnStatus(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
         """
         self.validate()
@@ -37,8 +36,7 @@ class GetTxnStatus(Base):
 
     def validate(self):
         """
-    * Validate all set details
-    *
+    * Validate all set details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -57,18 +55,15 @@ class GetTxnStatus(Base):
 
     def getOrderID(self):
         """
-    * Original request order id
-    *
+    * Original request order id\n
     * @return string
         """
         return self.__orderID
 
     def setOrderID(self, orderID: str):
         """
-    * Original request order id
-    *
-    * @param string orderID
-    *
+    * Original request order id\n
+    * @param string orderID\n
     * @return GetTxnStatus
         """
         self.__orderID = orderID

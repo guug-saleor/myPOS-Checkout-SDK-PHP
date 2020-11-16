@@ -13,18 +13,15 @@ class PreAuthorizationStatus(Base):
 
     def __init__(self, cnf: Config):
         """
-    * Return purchase object
-    *
+    * Return purchase object\n
     * @param cnf: Config
         """
         self._setCnf(cnf)
 
     def setOrderID(self, orderID: str):
         """
-    * Purchase identifier - must be unique
-    *
-    * @param string orderID
-    *
+    * Purchase identifier - must be unique\n
+    * @param string orderID\n
     * @return PreAuthorizationStatus
         """
         self.__orderID = orderID
@@ -33,8 +30,7 @@ class PreAuthorizationStatus(Base):
 
     def process(self):
         """
-    * Initiate API request
-    *
+    * Initiate API request\n
     * @return Response
     * @raises IPC_Exception
         """
@@ -56,8 +52,7 @@ class PreAuthorizationStatus(Base):
 
     def validate(self):
         """
-    * Validate all set purchase details
-    *
+    * Validate all set purchase details\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -73,8 +68,7 @@ class PreAuthorizationStatus(Base):
 
     def getOrderID(self):
         """
-    * Purchase identifier
-    *
+    * Purchase identifier\n
     * @return string
         """
         return self.__orderID

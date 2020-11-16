@@ -11,20 +11,17 @@ class Cart(object):
     ITEM_TYPE_DISCOUNT = 'discount'
 
     """
-    * Array containing cart items
-    *
+    * Array containing cart items\n
     * @var array
     """
     __cart = []
 
     def add(self, itemName, quantity, price, type = ITEM_TYPE_ARTICLE):
         """
-    *
     * @param string itemName Item name
     * @param int quantity Items quantity
     * @param float price Single item price
-    *
-    * @param string type
+    * @param string type\n
     * @return Cart
     * @raises IPC_Exception
         """
@@ -54,8 +51,7 @@ class Cart(object):
 
     def getTotal(self):
         """
-    * Returns cart total amount
-    *
+    * Returns cart total amount\n
     * @return float
         """
         sum = 0
@@ -67,8 +63,7 @@ class Cart(object):
 
     def getItemsCount(self):
         """
-    * Returns count of items in cart
-    *
+    * Returns count of items in cart\n
     * @return int
         """
         # TODO: select one of (list, dict)
@@ -76,8 +71,7 @@ class Cart(object):
 
     def validate(self):
         """
-    * Validate cart items
-    *
+    * Validate cart items\n
     * @return boolean
     * @raises IPC_Exception
         """
@@ -88,8 +82,7 @@ class Cart(object):
 
     def getCart(self):
         """
-    * Return cart array
-    *
+    * Return cart array\n
     * @return array
         """
         return self.__cart

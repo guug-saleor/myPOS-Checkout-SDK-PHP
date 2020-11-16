@@ -19,18 +19,15 @@ class Customer(object):
 
     def getPhone(self):
         """
-    * Customer Phone number
-    *
+    * Customer Phone number\n
     * @return string
         """
         return self.__phone
 
     def setPhone(self, phone: str):
         """
-    * Customer Phone number
-    *
-    * @param string phone
-    *
+    * Customer Phone number\n
+    * @param string phone\n
     * @return Customer
         """
         self.__phone = phone
@@ -39,18 +36,15 @@ class Customer(object):
 
     def getCountry(self):
         """
-    * Customer country code ISO 3166-1
-    *
+    * Customer country code ISO 3166-1\n
     * @return string
         """
         return self.__country
 
     def setCountry(self, country: str):
         """
-    * Customer country code ISO 3166-1
-    *
-    * @param string country
-    *
+    * Customer country code ISO 3166-1\n
+    * @param string country\n
     * @return Customer
         """
         self.__country = country
@@ -59,18 +53,15 @@ class Customer(object):
 
     def getCity(self):
         """
-    * Customer city
-    *
+    * Customer city\n
     * @return string
         """
         return self.__city
 
     def setCity(self, city: str):
         """
-    * Customer city
-    *
-    * @param string city
-    *
+    * Customer city\n
+    * @param string city\n
     * @return Customer
         """
         self.__city = city
@@ -79,18 +70,15 @@ class Customer(object):
 
     def getZip(self):
         """
-    * Customer ZIP code
-    *
+    * Customer ZIP code\n
     * @return string
         """
         return self.__zip
 
     def setZip(self, zip: str):
         """
-    * Customer ZIP code
-    *
-    * @param string zip
-    *
+    * Customer ZIP code\n
+    * @param string zip\n
     * @return Customer
         """
         self.__zip = zip
@@ -99,18 +87,15 @@ class Customer(object):
 
     def getAddress(self):
         """
-    * Customer address
-    *
+    * Customer address\n
     * @return string
         """
         return self.__address
 
     def setAddress(self, address: str):
         """
-    * Customer address
-    *
-    * @param string address
-    *
+    * Customer address\n
+    * @param string address\n
     * @return Customer
         """
         self.__address = address
@@ -119,10 +104,8 @@ class Customer(object):
 
     def validate(self, paymentParametersRequired):
         """
-    * Validate all set customer details
-    *
-    * @param string paymentParametersRequired
-    *
+    * Validate all set customer details\n
+    * @param string paymentParametersRequired\n
     * @return bool
     * @raises IPC_Exception
         """
@@ -141,18 +124,15 @@ class Customer(object):
 
     def getFirstName(self):
         """
-    * Customer first name
-    *
+    * Customer first name\n
     * @return string
         """
         return self.__firstName
 
     def setFirstName(self, firstName: str):
         """
-    * Customer first name
-    *
-    * @param string firstName
-    *
+    * Customer first name\n
+    * @param string firstName\n
     * @return Customer
         """
         self.__firstName = firstName
@@ -161,18 +141,15 @@ class Customer(object):
 
     def getLastName(self):
         """
-    * Customer last name
-    *
+    * Customer last name\n
     * @return string
         """
         return self.__lastName
 
     def setLastName(self, lastName: str):
         """
-    * Customer last name
-    *
-    * @param string lastName
-    *
+    * Customer last name\n
+    * @param string lastName\n
     * @return Customer
         """
         self.__lastName = lastName
@@ -181,18 +158,15 @@ class Customer(object):
 
     def getEmail(self):
         """
-    * Customer Email address
-    *
+    * Customer Email address\n
     * @return string
         """
         return self.__email
 
     def setEmail(self, email: str):
         """
-    * Customer Email address
-    *
-    * @param string email
-    *
+    * Customer Email address\n
+    * @param string email\n
     * @return Customer
         """
         self.__email = email
